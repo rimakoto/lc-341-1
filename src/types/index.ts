@@ -27,4 +27,7 @@ export interface AppStoreState {
   setSelectedId: (id: string | null) => void;
   setPermission: (granted: boolean, error?: string) => void;
   setRecordings: (list: WaveformRecord[]) => void;
+  playRecording: (id: string) => void;
+  stopPlayback: () => void;
+  togglePlayback: (id: string) => void;
 }

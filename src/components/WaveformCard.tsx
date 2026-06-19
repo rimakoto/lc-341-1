@@ -3,7 +3,6 @@ import { Play, Square, Trash2, Pencil, Check, Clock, Music } from "lucide-react"
 import FixedWaveCanvas from "@/components/FixedWaveCanvas";
 import type { WaveformRecord } from "@/types";
 import { useAppStore } from "@/store/useAppStore";
-import { usePlayback } from "@/hooks/usePlayback";
 
 interface Props {
   rec: WaveformRecord;
@@ -29,15 +28,14 @@ function formatDate(ts: number): string {
 }
 
 export default function WaveformCard({ rec, index }: Props) {
-  const playback = usePlayback();
   const removeRecording = useAppStore((s) => s.removeRecording);
   const updateNote = useAppStore((s) => s.updateNote);
   const setSelectedId = useAppStore((s) => s.setSelectedId);
   const selectedId = useAppStore((s) => s.selectedId);
   const isPlaying = useAppStore((s) => s.isPlaying);
   const playbackProgress = useAppStore((s) => s.playbackProgress);
-  const setIsPlaying = useAppStore((s) => s.setIsPlaying);
-  const setPlaybackProgress = useAppStore((s) => s.setPlaybackProgress);
+  const togglePlayback = useAppStore((s) => s.togglePlayback);
+  const stopPlayback = useAppStore((s) => s.stopPlayback);
 
   const [editingNote, setEditingNote] = useState(false);
   const [noteDraft, setNoteDraft] = useState(rec.note);
@@ -52,24 +50,7 @@ export default function WaveformCard({ rec, index }: Props) {
   const progress = playbackProgress[rec.id] ?? 0;
 
   const togglePlay = () => {
-    if (thisPlaying) {
-      playback.stop();
-      setIsPlaying(null);
-      setPlaybackProgress(rec.id, 0);
-    } else {
-      if (isPlaying) {
-        playback.stop();
-      }
-      setIsPlaying(rec.id);
-      setPlaybackProgress(rec.id, 0);
-      playback.play(rec.id, rec.audioBlobBase64, rec.duration, {
-        onProgress: (p) => setPlaybackProgress(rec.id, p),
-        onEnd: () => {
-          setIsPlaying(null);
-          setPlaybackProgress(rec.id, 0);
-        },
-      });
-    }
+    togglePlayback(rec.id);
   };
 
   const handleCanvasClick = () => {
@@ -89,8 +70,7 @@ export default function WaveformCard({ rec, index }: Props) {
 
   const confirmDelete = () => {
     if (thisPlaying) {
-      playback.stop();
-      setIsPlaying(null);
+      stopPlayback();
     }
     removeRecording(rec.id);
   };
