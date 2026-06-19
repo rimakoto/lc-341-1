@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: #e5e7eb;
+  background-color: #0a0e17;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(0, 255, 204, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(255, 45, 149, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0e17 0%, #070a10 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* 栅格背景辅助类 */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 255, 204, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* 示波器屏幕内发光 */
+.scope-screen {
+  background:
+    radial-gradient(ellipse at center, rgba(0, 255, 204, 0.03) 0%, transparent 70%),
+    linear-gradient(180deg, #070b13 0%, #0a1020 100%);
+  box-shadow:
+    inset 0 2px 20px rgba(0, 0, 0, 0.8),
+    inset 0 -2px 20px rgba(0, 255, 204, 0.05),
+    0 0 0 1px rgba(0, 255, 204, 0.15);
+}
+
+/* 扫描线效果 */
+.scanline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 204, 0.08) 50%,
+    transparent 100%
+  );
+  animation: scan-line 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* 输入框样式 */
+input.cyber-input {
+  background: rgba(10, 14, 23, 0.6);
+  border: 1px solid rgba(0, 255, 204, 0.15);
+  color: #e5e7eb;
+  transition: all 0.2s ease;
+}
+input.cyber-input:focus {
+  outline: none;
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.1), 0 0 12px rgba(0, 255, 204, 0.15);
+}
+input.cyber-input::placeholder {
+  color: #4b5563;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 14, 23, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 204, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 204, 0.4);
+}
+
+/* 按钮通用样式 */
+.btn-cyber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  background: rgba(0, 255, 204, 0.08);
+  border: 1px solid rgba(0, 255, 204, 0.25);
+  color: #00ffcc;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-cyber:hover {
+  background: rgba(0, 255, 204, 0.15);
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+}
+.btn-cyber:active {
+  transform: translateY(1px);
+}
+.btn-cyber:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-danger {
+  background: rgba(255, 45, 149, 0.08);
+  border-color: rgba(255, 45, 149, 0.25);
+  color: #ff6ba9;
+}
+.btn-danger:hover {
+  background: rgba(255, 45, 149, 0.15);
+  border-color: rgba(255, 45, 149, 0.5);
+  box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
+}
+
+.btn-amber {
+  background: rgba(255, 179, 71, 0.08);
+  border-color: rgba(255, 179, 71, 0.25);
+  color: #ffb347;
+}
+.btn-amber:hover {
+  background: rgba(255, 179, 71, 0.15);
+  border-color: rgba(255, 179, 71, 0.5);
+  box-shadow: 0 0 20px rgba(255, 179, 71, 0.2);
+}
+
+/* 波形卡片悬停 */
+.wave-card {
+  transition: all 0.25s ease;
+}
+.wave-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 255, 204, 0.2);
+}
+.wave-card.selected {
+  box-shadow: 0 8px 32px rgba(255, 179, 71, 0.15), 0 0 0 1px rgba(255, 179, 71, 0.5);
+}
+.wave-card.playing {
+  box-shadow: 0 8px 32px rgba(0, 255, 204, 0.25), 0 0 0 1px rgba(0, 255, 204, 0.6);
+}
+
+/* 录音按钮脉冲 */
+.rec-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #ff2d95;
+  animation: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.rec-pulse::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #ff2d95;
+  animation: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 0.6s;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* 噪点纹理 */
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.6;
+}
